@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheather Page</title>
+</head>
+<body>
+    {% extends 'Homepage.html' %}
+    {% block title %}Menu Maker{% endblock %}
+    {% block content %}
+    <section>
+        <div>
+            <div>
+                <h1 class="title">
+                    HOW IS THE Weather TO DAY!
+                </h1>
+            </div>
+        </div>
+    </section>
+<section>
+    <div>
+        <div>
+            <div>
+                <form action="" method="POST">
+                    <div>
+                        <div>
+                            <input type="text" name="city" placeholder="City Name">
+
+                            </div>
+                        <div class="">
+                            <button>
+                               ADD CITY
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div>
+        <div>
+            <div>
+                {% for weather in weather_data %}
+                <div>
+                    <article>
+                        <div>
+                            <figure>
+                                <img src="http://openweathermap.org/img/w/{{ weather.icon }}.png" alt="Image">
+                            </figure>
+                        </div>
+                        <div>
+                            <div>
+                                <p>
+                                    <span class="title">{{ weather.city }}</span>
+                                    <br>
+                                    <span class="subtiitle">{{ weather.temperature }}  F</span>
+                                    <br> {{ weather.description }}
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+                   </div>
+                {% endfor %}    
+            </div>
+        </div>
+    </div>
+</section>
+<footer class="footer">
+
+</footer>
+{% endblock %}
+</body>
+</html>
