@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'Homepage.html' %}
+    
+    {% block content %}
+   
+    {%for msg in get_flashed_messages()%}
+    <h3>{{msg}}</h3>
+    {% endfor%}
+    
+    <h2 class="display-1">Basic infomation</h2>
+    
+    <form action='/info_page' method="POST">
+    
+        <input type="text" name="first_name" placeholder="First_name">
+        <input type="text" name="last_name" placeholder="Last_name">
+        <input type="text" name="job_description" placeholder="Job_description">
+        <input type="text" name="reason" placeholder="How did you find this site">
+        <button>Submit</button> 
+        
+    </form>
+
+    {% endblock %}
+</body>
+</html>

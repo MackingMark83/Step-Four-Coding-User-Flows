@@ -1,22 +1,12 @@
-
-#import os
-
-from flask import Flask, render_template, request, flash, redirect, session  
+from flask import Flask, render_template, request, flash, redirect, session, url_for  
 import requests
 from flask_debugtoolbar import DebugToolbarExtension
 
 
-#from sqlalchemy.exc import IntegrityError
 
 from forms import UserForm 
 
 from models import db, connect_db, City, User, Info 
-
-#API_BASE_URL = 'https://api.spoonacular.com/recipes/complexSearch?'
-
-#apiKey = 'apiKey=287b42f8924842a8b692c3ee9b00c469'
-
-
 
 
 app = Flask(__name__)
@@ -33,8 +23,10 @@ connect_db(app)
 
 
 
-
-
+def get_weather_data(city):
+    url = f'http://api.openweathermap.org/data/2.5/weather?q={ city }&units=imperial&appid=becab9b25495075465e7cedcd8e003ae'
+    res = requests.get(url).json()
+    return res
 #############Menu Tables####################################################
 @app.route("/")
 def homepage():
@@ -55,7 +47,7 @@ def sign_up_form():
         session['user_id'] = new_user.id
         flash('Welcome! You have successfully created your account!', "success")
     
-        return redirect('/info')
+        return redirect('/info_form')
     
     return render_template("sign_up_form.html", form=form)
 
@@ -86,32 +78,24 @@ def log_out_form():
     session.pop('user_id')
     return render_template("log_out_page.html")
 
-@app.route("/wheather_page", methods=['GET', 'POST'])
-def application_form():
+
+##############################################################################
+
+@app.route("/wheather_page")
+def index_get():
     """Render Weather page."""
     if "user_id" not in session:
         flash('You are not logged in. Please log in.', "danger")
         return redirect('/')
-    
-       
-    if request.method == 'POST':
-        new_city = request.form.get('city')
-
-        if new_city:
-            new_city_obj = City(name=new_city)
-
-            db.session.add(new_city_obj)
-            db.session.commit()
+          
     cities = City.query.all() 
     
-    url = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=imperial&appid=becab9b25495075465e7cedcd8e003ae'
-    
-
     weather_data = []
 
     for city in cities:
-        res = requests.get(url.format(city.name)).json()
-    
+        
+       
+        res = get_weather_data(city.name)
 
         weather = {
             'city' : city.name,
@@ -126,11 +110,69 @@ def application_form():
     return render_template("Wheather_Page.html", weather_data=weather_data)
     
  
+@app.route("/wheather_page", methods=['POST'])
+def index_post():
+    """Render Weather page."""
+    if "user_id" not in session:
+        flash('You are not logged in. Please log in.', "danger")
+        return redirect('/')
+    err_msg = ''
+    new_city = request.form.get('city')
+
+    if new_city:
+        existing_city = City.query.filter_by(name=new_city).first()
+
+        if not existing_city:
+            new_city_data = get_weather_data(new_city)
+            if new_city_data['cod'] == 200:
+                new_city_obj = City(name=new_city)
+
+                db.session.add(new_city_obj)
+                db.session.commit()
+            else:
+                err_msg = "City does not exist in the world!"
+    
+        else:
+            err_msg = "City already exists in the database!"
+    
+
+    if err_msg: 
+        flash(err_msg, 'error')
+    else:
+        flash('City Added Succesfully!')
+
+    return redirect(url_for('index_get'))
+    
+@app.route('/delete/<name>') 
+def delete_city(name):
+    city = City.query.filter_by(name=name).first()
+    db.session.delete(city)
+    db.session.commit()
+
+    flash(f"Successfully deleted { city.name }", "success")
+    return redirect(url_for('index_get'))  
  
- ########################################################
-@app.route("/info", methods=['GET', 'POST'])
+    
+ ######################################################
+@app.route("/info_form", methods=['GET', 'POST'])
+def info_form():
+    """Render info_form."""
+    if "user_id" not in session:
+        flash('You are not logged in. Please log in.', "danger")
+        return redirect('/')
+    
+    
+    return render_template("info_form.html")
+
+
+
+
+@app.route("/info_page", methods=['GET', 'POST'])
 def info_page():
     """Render info_page"""
+    if "user_id" not in session:
+        flash('You are not logged in. Please log in.', 'danger')
+        return redirect('/')
        
     
     infos = Info.query.all()  
@@ -147,7 +189,7 @@ def info_page():
     db.session.commit()
     
     flash('Thank you for your infomation. Click the weather link to find the weather in your city', "success")
-    return render_template("info.html", first_name=first_name,
+    return render_template("info_page.html", first_name=first_name,
                                                    last_name=last_name,   
                                                    job_description=job_description,
                                                    reason=reason)
@@ -157,23 +199,4 @@ def info_page():
  
  
  
- #infos = Info.query.all()  
-    
-    #owners_first_name = request.form.get("owners_first_name")
-    #owners_last_name = request.form.get("owners_last_name")
-    #restaurant_name = request.form.get("restaurant_name")
-    #type_of_restaurant = request.form.get("type_of_restaurant")
-
-    #new_info = Info(owners_first_name=owners_first_name, owners_last_name=owners_last_name, 
-                                                              #restaurant_name=restaurant_name, 
-                                                              #type_of_restaurant=type_of_restaurant, 
-                                                              #user_id=session['user_id'])
-    #db.session.add(new_info)
-    #db.session.commit()
-    ##return redirect('/welcomebackpage')
-    #flash('Thank you for your infomation. Click the Application link to complete your menu', "success")
-    #return render_template("info.html", owners_first_name=owners_first_name,
-                                                   #owners_last_name=owners_last_name,   
-                                                   #restaurant_name=restaurant_name,
-                                                   #type_of_restaurant=type_of_restaurant)
-                                                   ##infos=infos)
+ 

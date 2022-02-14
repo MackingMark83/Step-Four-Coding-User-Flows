@@ -4,47 +4,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/app.css">
     <title>Document</title>
 </head>
+
+
+
 <body>
+    {% extends 'Homepage.html' %}
     
-    
+    {% block content %}
     <h2 class="display-1">Basic infomation</h2>
-    <form action='/info' method="POST">
-    
-        <input type="text" name="first_name" placeholder="First_name">
-        <input type="text" name="last_name" placeholder="Last_name">
-        <input type="text" name="job_description" placeholder="Job_description">
-        <input type="text" name="reason" placeholder="How did you find this site">
-        <button>Submit</button> 
-        
-        </form>
     
     <table class="table table- striped">
-        
       
-      
-        <thead class="thead-dark">
+    <thead class="thead-dark">
            <th>First Name</th>
            <th>Last Name</th>
            <th>Job Description</th>
            <th>Reason</th>
-       </thead>
-       <tbody>
-           
-           <tr>
+    </thead>
+    
+    <tbody>
+            <tr>
                <td>{{first_name}}</td>
                <td>{{last_name}}</td>
                <td>{{job_description}}</td>
                <td>{{reason}}</td>
             </tr>
            
-       </tbody>
+    </tbody>
       
-       {%for msg in get_flashed_messages()%}
-       <h3>{{msg}}</h3>
-       {% endfor%}
        
-<a href="/wheather_page"></a>
+       
+<h3> <a href="/wheather_page">Find the weather</a> </h3>
+{% endblock %}
 </body>
 </html>
