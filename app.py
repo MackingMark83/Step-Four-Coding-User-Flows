@@ -10,7 +10,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from forms import UserForm 
 
-from models import db, connect_db, City, User 
+from models import db, connect_db, City, User, Info 
 
 #API_BASE_URL = 'https://api.spoonacular.com/recipes/complexSearch?'
 
@@ -55,7 +55,7 @@ def sign_up_form():
         session['user_id'] = new_user.id
         flash('Welcome! You have successfully created your account!', "success")
     
-        return redirect('/wheather_page')
+        return redirect('/info')
     
     return render_template("sign_up_form.html", form=form)
 
@@ -89,6 +89,11 @@ def log_out_form():
 @app.route("/wheather_page", methods=['GET', 'POST'])
 def application_form():
     """Render Weather page."""
+    if "user_id" not in session:
+        flash('You are not logged in. Please log in.', "danger")
+        return redirect('/')
+    
+       
     if request.method == 'POST':
         new_city = request.form.get('city')
 
@@ -120,3 +125,55 @@ def application_form():
    
     return render_template("Wheather_Page.html", weather_data=weather_data)
     
+ 
+ 
+ ########################################################
+@app.route("/info", methods=['GET', 'POST'])
+def info_page():
+    """Render info_page"""
+       
+    
+    infos = Info.query.all()  
+   
+    first_name = request.form.get("first_name")
+    last_name = request.form.get("last_name")
+    job_description = request.form.get("job_description")
+    reason = request.form.get("type_of_restaurant")
+
+    new_info = Info( first_name=first_name, last_name=last_name, job_description=job_description, reason=reason, user_id=session['user_id'])
+    
+    
+    db.session.add(new_info)
+    db.session.commit()
+    
+    flash('Thank you for your infomation. Click the weather link to find the weather in your city', "success")
+    return render_template("info.html", first_name=first_name,
+                                                   last_name=last_name,   
+                                                   job_description=job_description,
+                                                   reason=reason)
+                                                   
+
+    
+ 
+ 
+ 
+ #infos = Info.query.all()  
+    
+    #owners_first_name = request.form.get("owners_first_name")
+    #owners_last_name = request.form.get("owners_last_name")
+    #restaurant_name = request.form.get("restaurant_name")
+    #type_of_restaurant = request.form.get("type_of_restaurant")
+
+    #new_info = Info(owners_first_name=owners_first_name, owners_last_name=owners_last_name, 
+                                                              #restaurant_name=restaurant_name, 
+                                                              #type_of_restaurant=type_of_restaurant, 
+                                                              #user_id=session['user_id'])
+    #db.session.add(new_info)
+    #db.session.commit()
+    ##return redirect('/welcomebackpage')
+    #flash('Thank you for your infomation. Click the Application link to complete your menu', "success")
+    #return render_template("info.html", owners_first_name=owners_first_name,
+                                                   #owners_last_name=owners_last_name,   
+                                                   #restaurant_name=restaurant_name,
+                                                   #type_of_restaurant=type_of_restaurant)
+                                                   ##infos=infos)

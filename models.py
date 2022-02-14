@@ -11,6 +11,29 @@ def connect_db(app):
     db.app = app
     db.init_app(app)
 
+
+class Info(db.Model):
+    __tablename__ = 'infos' 
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    
+    first_name = db.Column(db.Text, nullable=True)
+
+    last_name = db.Column(db.Text, nullable=True)
+
+    job_description = db.Column(db.Text, nullable=True)
+
+    reason = db.Column(db.Text, nullable=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    user = db.relationship('User', backref="infos")
+
+
+
+
+
+
 class City(db.Model):
     __tablename__ = 'cities' 
 
