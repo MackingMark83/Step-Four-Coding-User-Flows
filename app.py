@@ -189,10 +189,8 @@ def info_page():
     db.session.commit()
     
     flash('Thank you for your infomation. Click the weather link to find the weather in your city', "success")
-    return render_template("info_page.html", first_name=first_name,
-                                                   last_name=last_name,   
-                                                   job_description=job_description,
-                                                   reason=reason)
+    
+    return render_template("info_page.html", first_name=first_name, last_name=last_name, job_description=job_description, reason=reason)
                                                    
 
     

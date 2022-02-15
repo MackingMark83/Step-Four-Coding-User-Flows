@@ -4,16 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="/static/app.css">
+    
+    
     <title>Document</title>
 </head>
 <body>
-    {% extends 'Homepage.html' %}
-    
-    {% block content %}
-   
+    <h1>Weather Finder</h1>
+ 
     {%for msg in get_flashed_messages()%}
-    <h3>{{msg}}</h3>
-    {% endfor%}
+      <h3>{{msg}}</h3>
+      {% endfor%}
+    
+   
+   
     
     <h2 class="display-1">Basic infomation</h2>
     
@@ -27,6 +33,6 @@
         
     </form>
 
-    {% endblock %}
+    
 </body>
 </html>

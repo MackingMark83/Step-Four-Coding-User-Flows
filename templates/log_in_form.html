@@ -4,15 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/app.css">
+    <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="/static/app.css"> 
     <title>Log IN</title>
 </head>
 
 
 <body>
-  {% extends 'Homepage.html' %}
-    {% block title %}Weather Finder{% endblock %}
-    {% block content %}
+  <h1>Weather Finder</h1>
+ 
+  {%for msg in get_flashed_messages()%}
+    <h3>{{msg}}</h3>
+    {% endfor%}
+  
   
     <h1 class="display-1">Log In!</h1>
     
@@ -35,7 +40,7 @@
      <button class="btn btn-success" type="submit">Submit</button>
     </form>
   
-    {% endblock %}
+   
 
     
 </body>

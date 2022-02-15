@@ -4,14 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>sign up</title>
+    <link rel="stylesheet"
+        href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="/static/app.css"> 
 </head>
 <body>
-    {% extends 'Homepage.html' %}
-    {% block title %}Menu Maker{% endblock %}
-    {% block content %}
-    <h1 class="display-1">Sign Up!</h1>
-    
+ 
+  
+  
+  <h1>Weather Finder</h1>
+ 
+   
+    <h2 class="display-1">Sign Up!</h2>
+    <p class="lead">Already have account. Log in? <a href="/log_in">Log In Here</a> </p>
+    {%for msg in get_flashed_messages()%}
+    <h3>{{msg}}</h3>
+    {% endfor%}
+  
+  
     <form  method="Post">
         {{ form.hidden_tag() }}
         {% for field in form if field.widget.input_type != 'hidden' %}
@@ -29,7 +40,7 @@
    
      <button class="btn btn-success" type="submit">Submit</button>
     </form>
-    {% endblock %}
+    
 
 </body>
 </html>

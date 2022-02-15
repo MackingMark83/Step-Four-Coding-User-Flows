@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}Weather Finder{% endblock %}</title>
+  <title>Home page</title>
 
   <link rel="stylesheet"
         href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
@@ -18,8 +18,12 @@
 
 <body>
   <h1>Weather Finder</h1>
+ 
+  {%for msg in get_flashed_messages()%}
+    <h3>{{msg}}</h3>
+    {% endfor%}
   
-  {% block content %} {% endblock %}
+  
   <nav class="navbar">
    
     
@@ -38,17 +42,7 @@
 
 
 
+   
+  </body>
 
-
-
-
-  
-
-
-
-
-{%for msg in get_flashed_messages()%}
-    <h3>{{msg}}</h3>
-    {% endfor%}
-</body>
 </html>

@@ -7,17 +7,33 @@
     <title>Wheather Page</title>
     <link rel="stylesheet"
         href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
-    {% extends 'Homepage.html' %}
+    <nav class="navbar">
+   
     
-    {% block content %}
+        <a href="/sign_up">Sign Up!</a>
+        
+        <a href="/log_in">Log In!</a>
+        
+        {% if session['user_id'] %}
+        <a href="/log_out">Log Out!</a>
+        {% else %}
+      
+    
+        
+        {% endif %}
+      </nav>
+    
+
     <section>
         <div>
             <div>
                 <h1 class="title">
                     HOW IS THE Weather TO DAY!
                 </h1>
+               
             </div>
         </div>
     </section>
@@ -88,9 +104,7 @@
         </div>
     </div>
 </section>
-<footer class="footer">
 
-</footer>
-{% endblock %}
+
 </body>
 </html>
